@@ -62,7 +62,6 @@ public class bparser
 		}
 		else if(auswahl_in == 2)
 		{
-			//gorevli();
 			
 		}
 		else if(auswahl_in == 3)
@@ -82,13 +81,33 @@ public class bparser
 
          HashMap<String, Integer> wordMap = localWordMap.parse();
          Scanner input = new Scanner(System.in);
+         System.out.println("Bitte geben Sie das gesuchte Wort ein:");
 	  		String wort = null;
 	  		wort = input.nextLine();
 	  		
-	  		System.out.println(wordMap.get(wort));
+	  		System.out.println("Das Wort " + wort + " wurde " + wordMap.get(wort) + " mal in der Bibel gefunden.");
+	  		System.out.println("# Möchten Sie noch ein weiteres Wort suchen? - 1 \n#Zurück zur Hauptmenü - 2 ");
+	  		int auswahl_in =0;
+	  		auswahl_in = input.nextInt();
+			if(auswahl_in == 1)
+			{
+				wortersuche();
+			}
+			else if(auswahl_in == 2)
+			{
+				navi();
+			}
+			else 
+			{
+				System.out.println("Falsche Eingabe --- \n Möchten Sie noch eine weiteres Wort suchen? - 1 \n Zurück zur Hauptmenü - 2 ");
+				
+			}
+         
  
 	 }
+		
 	  		
 	 }
-	 
+
+
 
