@@ -29,9 +29,12 @@ import java.util.regex.Pattern;
  */
  
 public class bparser
+
+
 {
-	public static HashMap<String, Integer> wordMap = new HashMap<>();
-	 
+	static map localWordMap = new map();
+
+
     public static void main(String[] args) throws FileNotFoundException,
                 IOException {
           navi();
@@ -55,7 +58,7 @@ public class bparser
 		auswahl_in = auswahl;
 		if(auswahl_in == 1)
 		{
-			wortsuche(wordMap);
+			wortersuche();
 		}
 		else if(auswahl_in == 2)
 		{
@@ -74,57 +77,18 @@ public class bparser
 		return auswahl_in;
 	}
     
-    public static HashMap<String, Integer> parse() throws IOException, FileNotFoundException {
+   
+	 public static void wortersuche() throws FileNotFoundException, IOException{
 
-          String filePath = "iso88";
-          File file = new File(filePath);
-          FileInputStream inputStream = new FileInputStream(file);
-
-          InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("ISO-8859-15"));
-          BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-          StringBuilder stringBuilder = new StringBuilder();
-          String s = "";
-
-          Pattern p = Pattern.compile("([A-Z][a-z]{2,2}|[1-9][A-Z][a-z]) [1-9][0-9]*:[1-9][0-9]*");
-
-          if (file.exists()) {
-
-                while (bufferedReader.ready()) {
-                      s = bufferedReader.readLine();
-                      Matcher m = p.matcher(s);
-
-                      stringBuilder.append(m.replaceAll("") + "\n");
-                }
-          }
-          String text[] = stringBuilder.toString().replaceAll("[_[^\\w\\däüöÄÜÖ\\+\\- ]]", "").split(" ");
-          for (int i = 0; i < text.length; i++) {
-                if (wordMap.containsKey(text[i]))
-                      wordMap.put(text[i], wordMap.get(text[i]) + 1);
-                else
-                      wordMap.put(text[i], 1);
-          }
-          
-         
-		return wordMap;
-      	
-      		//System.out.println(wordMap.toString());
-    }
-
-    public static void wortsuche(HashMap<String, Integer> wordMap) {
-
-    	Scanner input = new Scanner(System.in);
-  		String wort = null;
-  		wort = input.nextLine();
-  		
-  		System.out.println(wordMap.get(wort));
-    	
-    }
-    
-    
-    
-    
-    
-    
-    
-	}
+         HashMap<String, Integer> wordMap = localWordMap.parse();
+         Scanner input = new Scanner(System.in);
+	  		String wort = null;
+	  		wort = input.nextLine();
+	  		
+	  		System.out.println(wordMap.get(wort));
+ 
+	 }
+	  		
+	 }
+	 
 
