@@ -58,7 +58,7 @@ public class Main {
 				break;
 
 			case 2:
-				System.out.println("Bitte geben Sie die Zahl der ersten Elemente ein:"); //burayi daha g�zel yaz istersen
+				System.out.println("Bitte geben Sie die Zahl der ersten Elemente ein:");
 				int j = input.nextInt();
 				List<Entry<String, Integer>> list = parser.getTopWords(j);
 				for (Entry<String, Integer> entry : list) {
