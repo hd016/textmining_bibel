@@ -46,7 +46,7 @@ public class Main {
 		int auswahl;
 		System.out.println();
 		while (true) {
-			System.out.println("#NAVI#\n 1 - Wortsuche \n 2 - Top-10 Wörter \n 3 - Exit \n Bitte geben Sie eine Zahl an:");
+			System.out.println("#NAVI#\n 1 - Wortsuche \n 2 - Meist auftrende Wörter \n 3 - Meist auftretende Sätze \n 4 - Kürzester Satz \n 5 - Längster Satz \n 6 - Exit \n Bitte geben Sie eine Zahl an:");
 			auswahl = input.nextInt();
 
 			switch (auswahl) {
@@ -60,14 +60,31 @@ public class Main {
 			case 2:
 				System.out.println("Bitte geben Sie die Zahl der ersten Elemente ein:");
 				int j = input.nextInt();
-				List<Entry<String, Integer>> list = parser.getTopWords(j);
-				for (Entry<String, Integer> entry : list) {
+				List<Entry<String, Integer>> woerterListe = parser.getTopWoerter(j);
+				for (Entry<String, Integer> entry : woerterListe) {
 					System.out.println(entry.getKey() + ": " + entry.getValue());
 				}
 				System.out.println();
 				break;
-
 			case 3:
+				System.out.println("Bitte geben Sie die Zahl der ersten Elemente ein:");
+				int k = input.nextInt();
+				List<Entry<String, Integer>> saetzeListe = parser.getTopSaetze(k);
+				for (Entry<String, Integer> entry : saetzeListe) {
+					System.out.println(entry.getKey() + ": " + entry.getValue());
+				}
+				System.out.println();
+				break;
+			case 4:
+				String kuerzesterSatz = parser.kuerzesterSatz();
+				System.out.println("\""+kuerzesterSatz+"\" "+ kuerzesterSatz.length() +" Zeichen");
+				break;
+			case 5:
+				String laengsterSatz = parser.laengsterSatz();
+				System.out.println("\""+laengsterSatz+"\" "+ laengsterSatz.length() +" Zeichen");
+				break;
+			case 6:
+				input.close();
 				System.exit(0);
 				break;
 			default:
