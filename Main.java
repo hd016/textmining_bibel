@@ -8,45 +8,33 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Scanner;
-/*
- * TEXTMINING PROJEKT:
- *  - ENTFERNEN DER BUCHNAMEN UND VERSNUMMERN - OK
- * ANALYSE DER BIBEL,ÜBER:
- * 	- TOP 10 WÖRTER
- *  - TOP 10 2-WORT PHASEN, 3,4,..,n
- *  - WÖRTERVERGLEICHE
- *  - WÖRTER/PAARE - FAMILIEN 
- *  - POSITIV/NEGATIV
- *  
- *  TOOLS:
- *  HASH-MAP
- *  TFI
- *  SPACEVEKTORMODELL
- */
+
 
 public class Main {
-	Parser parser;
 
-	public static void main(String[] args) throws IOException {
-		new Main().navi();
+	public static void main(String[] args) throws IOException {		
+		navi();
 	}
 
-	public void navi() throws IOException {
+	public static void navi() throws IOException {
 		String filePath = "iso88";
 		File file = new File(filePath);
 		FileInputStream inputStream = new FileInputStream(file);
 		InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("ISO-8859-15"));
 
+		Parser parser;
 		if (file.exists())
-			this.parser = new Parser(inputStreamReader);
+			parser = new Parser(inputStreamReader);
 		else
-			return;
+			return; //bricht ab, wenn die Datei nicht existiert
 
 		Scanner input = new Scanner(System.in);
 		int auswahl;
 		System.out.println();
 		while (true) {
-			System.out.println("#NAVI#\n 1 - Wortsuche \n 2 - Meist auftrende Wörter \n 3 - Meist auftretende Sätze \n 4 - Kürzester Satz \n 5 - Längster Satz \n 6 - Exit \n Bitte geben Sie eine Zahl an:");
+			System.out.println("#NAVI#\n 1 - Wortsuche \n 2 - Meist auftrende Wörter \n"
+					+ " 3 - Meist auftretende Sätze \n 4 - Kürzester Satz "
+					+ "\n 5 - Längster Satz \n 6 - Exit \n Bitte geben Sie eine Zahl an:");
 			auswahl = input.nextInt();
 
 			switch (auswahl) {
