@@ -31,8 +31,7 @@ public class Parser {
 	private void parse() throws IOException {
 		String s = "";
 
-		Pattern p = Pattern
-				.compile("([A-Z][a-z]{2,2}|[1-9][A-Z][a-z]) [1-9][0-9]*:[1-9][0-9]*");
+		Pattern p = Pattern.compile("([A-Z][a-z]{2,2}|[1-9][A-Z][a-z]) [1-9][0-9]*:[1-9][0-9]*");
 
 		while (bufferedReader.ready()) {
 			s = bufferedReader.readLine();
@@ -41,16 +40,40 @@ public class Parser {
 			stringBuilder.append(m.replaceAll(""));
 		}
 
-		String woerterArray[] = stringBuilder.toString()
-				.replaceAll("[_[^\\w\\däüöÄÜÖ\\+\\- ]]", "").split(" ");
+		
+		
+		/** erstelle filter, für weniger interssante aber häufig vorkommende Wörter*/
+		ArrayList<String> filter = new ArrayList<String>();
+		String[] filterA = new String[] { "und", "der", "die", "zu", "sie",
+				"den", "dass", "das", "Und", "er", "nicht", "in", "des", "dem",
+				"ist", "von", "mit", "auf", "aber", "ein", "an", "es", "so",
+				"wird","denn","sich","sein","da","wie","hat","vor","werden","war","aus","über","auch","sind","aus",
+				"Da","ich","euch","ihn", "will","seine", "soll","sprach", "mir","was", "du","ihr","ihm","im" };
+		for (int i = 0; i < filterA.length; i++)
+			filter.add(filterA[i]);
+		
+		
+		/** Füllen der Wörter in die Map mit der entsprechenden Häufigkeit.
+		 * (<Wort>,<Häufigkeit>)*/
+		
+		s = stringBuilder.toString();
+		s.replaceAll("[_[^\\w\\däüöÄÜÖ\\+\\- ]]", ""); //ersetze alle nicht Buchstaben
+		
+		String woerterArray[] = s.split(" ");// splitte bei jedem Leerzeichen -> Entstehung der Wörter
+		
+		
 		for (int i = 0; i < woerterArray.length; i++) {
-			if (woerter.containsKey(woerterArray[i]))
-				woerter.put(woerterArray[i], woerter.get(woerterArray[i]) + 1);
-			else
-				woerter.put(woerterArray[i], 1);
+			if(!filter.contains(woerterArray[i])) //schaue ob Wort im Filter
+				if (woerterArray[i].length() > 5)
+				if (woerter.containsKey(woerterArray[i]))//wenn Wort bereits in der Map
+					woerter.put(woerterArray[i], woerter.get(woerterArray[i]) + 1); //zähle die Häufigkeit hoch
+				else
+					woerter.put(woerterArray[i], 1); //wenn Wort noch nicht in der Map, füge es ein und setze Häufigkeit auf 1
 		}
 
-		String saetzeArray[] = stringBuilder.toString().split("\\.|!|\\?");
+		/** Füllen der Sätze in die Map mit der entsprechenden Häufigkeit.
+		 * (<Satz>,<Häufigkeit>)*/
+		String saetzeArray[] = stringBuilder.toString().split("\\.|!|\\?"); //Satz endet mit Punkt, Ausrufzeichen oder Fragezeichen
 		for (int i = 0; i < saetzeArray.length; i++) {
 			if (saetze.containsKey(saetzeArray[i]))
 				saetze.put(saetzeArray[i], saetze.get(saetzeArray[i]) + 1);
@@ -59,40 +82,40 @@ public class Parser {
 		}
 	}
 
+	/** liefert die Häufigkeit, des entsprechenden Wortes*/
 	public int woertersuche(String wort) {
 		if (woerter.containsKey(wort))
 			return woerter.get(wort).intValue();
 		return 0;
 	}
 
-	// -----------------MITHILFE VON ORKAN YÜCEDAG, UNI
-	// KONSTANZ-------------------------------------\\
-
+	/** erstelle eine Liste von Entrys aus der Map, um sie mit der ArrayList zu sortieren*/
+	/*	 Integer i = 2;
+	 Integer k = 3;
+	 i.compareTo(k); //Ausgabe -1
+	 // compareTo bei Integer Typ. Vergleich der Werte
+	 http://stackoverflow.com/questions/2839137/how-to-use-comparator-in-java-to-sort
+	  * 
+	  * 
+*/
 	public List<Map.Entry<String, Integer>> getTopWoerter(int i) {
-		ArrayList<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String, Integer>>(
-				woerter.entrySet());
+		ArrayList<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String, Integer>>(woerter.entrySet());
 
+		//http://stackoverflow.com/questions/19682818/collections-sort-using-comparator
 		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-
-			@Override
-			public int compare(Entry<String, Integer> o1,
-					Entry<String, Integer> o2) {
+			public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {
 				return o2.getValue().compareTo(o1.getValue());
 			}
 		});
 		return list.subList(0, i);
-		// ------------------------------------------------------------------------------------------------\\
 	}
 
-	public List<Map.Entry<String, Integer>> getTopSaetze(int i) {
-		ArrayList<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String, Integer>>(
-				saetze.entrySet());
 
+	public List<Map.Entry<String, Integer>> getTopSaetze(int i) {
+		ArrayList<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String, Integer>>(saetze.entrySet());
 		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
 
-			@Override
-			public int compare(Entry<String, Integer> o1,
-					Entry<String, Integer> o2) {
+			public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {
 				return o2.getValue().compareTo(o1.getValue());
 			}
 		});
@@ -101,7 +124,7 @@ public class Parser {
 
 	public String kuerzesterSatz() {
 		ArrayList<String> list = new ArrayList<String>(saetze.keySet());
-		String kuerzesterSatz = list.get(list.size() - 1);
+		String kuerzesterSatz = list.get(list.size() - 1); // start letzte Stelle
 		for (String s : list) {
 			if (s.length() > 2 && s.length() < kuerzesterSatz.length())
 				kuerzesterSatz = s;
@@ -112,9 +135,9 @@ public class Parser {
 
 	public String laengsterSatz() {
 		ArrayList<String> list = new ArrayList<String>(saetze.keySet());
-		String laengsterSatz = list.get(list.size() - 1);
+		String laengsterSatz = list.get(list.size() - 1); // start letzte Stelle
 		for (String s : list) {
-			if (s.length() > 2 && s.length() > laengsterSatz.length())
+			if (s.length() > laengsterSatz.length())
 				laengsterSatz = s;
 		}
 
@@ -122,3 +145,4 @@ public class Parser {
 	}
 
 }
+ 
